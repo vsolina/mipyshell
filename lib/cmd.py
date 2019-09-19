@@ -4,6 +4,9 @@ Super simple, VT100 compatible, Command line interpreter helper class
 '''
 
 import sys
+sread = sys.stdin.read
+swrite = sys.stdout.write
+
 
 class Cmd:
     def __init__(self):
@@ -15,60 +18,43 @@ class Cmd:
         pass
     
     def cmdloop(self):
-        sys.stdout.write(self.prompt)
+        self.redraw_line()
+#        sys.stdout.swrite(self.prompt)
         self._idx = 0#len(self.prompt)
+        kmap_1ch = {'\x7f': self._backspace, '\t': self._tab, '\n': self._enter}
+        kmap_2ch = {'A': self._up, 'B': self._down, 'C': self._right, 'D': self._left, 'H': self._home, 'F': self._end}
+        kmap_3ch = {'3': self._delete}#, '5': self._pgup, '6': self._pgdown}
         while True:
-            c = sys.stdin.read(1)
+            c = sread(1)
             if c == '\x1b':
-                c2 = sys.stdin.read(1)
+                c2 = sread(1)
                 if c2 == '[':
-                    c3 = sys.stdin.read(1)
-                    if c3 == 'A':
-                        self._up()
-                    if c3 == 'B':
-                        self._down()
-                    if c3 == 'C':
-                        self._right()
-                    if c3 == 'D':
-                        self._left()
-                    if c3 == 'H':
-                        self._home()
-                    if c3 == 'F':
-                        self._end()
-
-                    if c3 == '3':
-                        _ = sys.stdin.read(1)
-                        self._delete()
-                    if c3 == '5':
-                        _ = sys.stdin.read(1)
-                        self._pgup()
-                    if c3 == '6':
-                        _ = sys.stdin.read(1)
-                        self._pgdown()
-            elif c == '\x7f':
-                self._backspace()
-            elif c == '\t':
-                self._tab()
-            elif c == '\n':
-                self._enter()
-            
+                    c3 = sread(1)
+                    if c3 in kmap_2ch.keys():
+                        kmap_2ch[c3]()
+                    elif c3 in kmap_3ch.keys():
+                        _ = sread(1)
+                        kmap_3ch[c3]()
+            elif c in kmap_1ch.keys():
+                kmap_1ch[c]()
             else:
                 if len(self._line) == self._idx:
                     self._line += c
+                    self._idx += 1
+                    swrite(c)
                 else:
                     self._line = self._line[:self._idx] + c + self._line[self._idx:]
-                self._idx += 1
-                self.redraw_line()
-#                sys.stdout.write(c)
+                    self._idx += 1
+                    self.redraw_line()
     
     def redraw_line(self):
-        sys.stdout.write("\033[256D")
-#        sys.stdout.write("\033[{}D".format(len(self.prompt) + self._idx))
-        sys.stdout.write("\033[2K")
-        sys.stdout.write(self.prompt)
-        sys.stdout.write(self._line)
+        swrite("\033[256D")
+#        swrite("\033[{}D".format(len(self.prompt) + self._idx))
+        swrite("\033[2K")
+        swrite(self.prompt)
+        swrite(self._line)
         if len(self._line) - self._idx > 0:
-            sys.stdout.write("\033[{}D".format(len(self._line) - self._idx))
+            swrite("\033[{}D".format(len(self._line) - self._idx))
 
     def execute_command(self, command):
         print("Executing command: {}".format(command))
@@ -77,32 +63,32 @@ class Cmd:
         return line, False
 
     def _enter(self):
-        sys.stdout.write("\n")
+        swrite("\n")
         if len(self._line) > 0:
             self.history.append(self._line)
             self.execute_command(self._line)
 
         self._line = ""
-        sys.stdout.write(self.prompt)
+        swrite(self.prompt)
         self._idx = 0#len(self.prompt)
         self._history_idx = 0
 
     def _left(self):
         if self._idx > 0:
-            sys.stdout.write("\033[{}D".format(1))
+            swrite("\033[{}D".format(1))
             self._idx -= 1
 
     def _right(self):
         if self._idx < len(self._line):
-            sys.stdout.write("\033[{}C".format(1))
+            swrite("\033[{}C".format(1))
             self._idx += 1
 
     def _home(self):
-        sys.stdout.write("\033[{}D".format(self._idx))
+        swrite("\033[{}D".format(self._idx))
         self._idx = 0
 
     def _end(self):
-        sys.stdout.write("\033[{}C".format(len(self._line)-self._idx))
+        swrite("\033[{}C".format(len(self._line)-self._idx))
         self._idx = len(self._line)
 
     def _backspace(self):
