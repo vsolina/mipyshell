@@ -6,7 +6,7 @@ def __main__(args):
 	if url.endswith("/"):
 		filename = "index"
 	else:
-		filename = url.split("/")[-1]
+		filename = url.split("/")[-1].split("?")[0]
 	fp = open(filename, "wt")
 	r = urequests.get(url).raw
 	while (True):

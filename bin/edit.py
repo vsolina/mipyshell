@@ -1,4 +1,5 @@
 import pye
+import sys
 
 def __main__(args):
 	if len(args) < 3:
@@ -8,4 +9,5 @@ def __main__(args):
 	
 	pth = args[2]
 	pye.pye(pth)
+	del sys.modules['pye']
 

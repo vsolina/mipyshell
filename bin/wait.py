@@ -5,5 +5,5 @@ def __main__(args):
         print ("Usage: wait <seconds>")
         return
 
-	time.sleep(int(args[2]))
+    time.sleep(int(args[2]))
 
