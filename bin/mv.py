@@ -2,9 +2,9 @@ import os
 
 
 def __main__(args):
-	path = args[1]
-	path2 = args[2]
-	src_name = args[1].split("/")[-1]
+	path = args[2]
+	path2 = args[3]
+	src_name = args[2].split("/")[-1]
 	
 	try:
 		os.listdir(path2)

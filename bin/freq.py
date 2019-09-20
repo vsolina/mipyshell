@@ -1,4 +1,4 @@
-iimport machine
+import machine
 
 def __main__(args):
     if len(args) < 3:

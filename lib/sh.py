@@ -11,6 +11,7 @@ import sys
 import machine
 import gc
 
+
 _threads_enabled = False
 try:
 	import _thread
@@ -104,6 +105,20 @@ def free_imp(args):
 def reset_imp(args):
 	machine.reset()
 
+def modules_imp(args):
+	print (sys.modules)
+
+def time_imp(args):
+	import time
+	s = time.ticks_ms()
+#    print("Executing {}".format(
+	execute_command(" ".join(args[1:]))
+	ms = time.ticks_ms() - s
+	minutes = ms // 60000
+	seconds = (ms - minutes*60000) // 1000
+	print ("{}m{}.{:0>3}".format(minutes, seconds, ms % 1000))
+
+
 ## Special commands
 def python_imp(args):
 	if len(args) == 1:
@@ -144,6 +159,7 @@ cmds_integrated = {
 			 "reboot": reset_imp,
 			 "reset": reset_imp,
 			 "python": python_imp,
+			 "time": time_imp,
 			 "quit": quit_imp}
 
 def all_commands(start):
