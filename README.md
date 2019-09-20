@@ -1,12 +1,6 @@
 MicroPython Shell
 =================
 
-MicroControllers are great  
-ESP32 controllers are even better  
-MicroPython on ESP32 is empowering  
-Adding shell on top basically transforms your ESP32 into a computer on the network  
-
-
 This is a simple shell implementation that enables you to use your ESP almost as a normal *nix computer  
 If you have an ESP32 version with external PSRAM and SD card support, you can do some serious sh...stuff  
 Should work with other MicroPython-supported controllers like pyboard, but did not test so far  
@@ -48,6 +42,7 @@ Standard commands integrated in sh.py:
 - help - Print available commands
 - uname - Details about MCU and MicroPython
 - kill - Does not work, should stop a background thread listed in ps
+- time - Measures execution time of another command
 
 Keep in mind: those commands are quite basic and don't support almost any switches for now  
     don't expect 'ls -alh' to work
@@ -104,7 +99,6 @@ No users or permissions
 Killing threads does not work, once you start a thread it needs to finish on its own  
 I/O redirection is not supported and might not be possible to implement in MicroPython  
 Pipes are not supported and might not be possible to implement in MicroPython  
-Current version does not work on ESP8266 because of memory constraints, but it used to. Will fix that really soon by moving some integrated commands to separate scripts.  
 cmd.py is not a standard Python's cmd module nor micropython-cmd because latter does not support line completion and other necessary features; it's rather a custom version that implements handling of common special keys like arrows, tab, home and end, pgup and pgdown  
 
 
@@ -114,4 +108,6 @@ New era of MCUs
 Don't compile, Interpret instead  
 Don't flash, Configure instead  
 Don't use serial, Telnet instead  
+
+Running shell on a microcontroller will transform your MCU into a configurable computer on the network  
 
