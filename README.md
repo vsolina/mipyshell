@@ -32,7 +32,7 @@ Everything you add to /bin will be available as a command
 You can pass arguments to invoked commands, but there is a non-standard way of declaring __main__ functionality within a python script because of some MicroPython limitations. To be explained further  
 
 Standard commands integrated in sh.py:  
-- ls, pwd, cd, cp, mv, mkdir, rmdir - Filesystem commands
+- ls, pwd, cd, cp, mv, mkdir, rmdir, touch - Filesystem commands
 - cat - Print or write contents of a file
 - reboot, restart, reset - Hard reset
 - ps - List running threads
@@ -68,6 +68,11 @@ Lots of useful scripts are provided with the project, eg.:
 - ramdisk - Create a temporary file system stored in RAM that dinamically allocates memory on demand
 - scani2c - Scans for i2c devices attached on ports sda = 4 and scl = 5
 - clear - Clears the screen
+- beep - Send a tone out through an attached speaker
+- photo - Take a photo into a file on an ESP32CAM
+- blink - Flash an LED
+- adc - Read and chart an analogue input from a nominated pin
+- set - Sent an analogue (pwm) signal out through a nominated pin
 
 
 Some features

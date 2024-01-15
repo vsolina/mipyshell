@@ -87,6 +87,14 @@ def rmdir_imp(args):
     path = args[1]
     os.rmdir(path)
 
+def touch_imp(args):
+    path = args[1]
+    with open(path, 'a'):
+        try:
+            os.utime(path, None)
+        except Exception as e:
+            pass # micropython has no utime
+
 def cd_imp(args):
     path = args[1]
     os.chdir(path)
@@ -149,6 +157,7 @@ alive = True
 cmds_integrated = {
              "mkdir": mkdir_imp,
              "rmdir": rmdir_imp,
+             "touch": touch_imp,
              "cd": cd_imp,
              "pwd": pwd_imp,
              "rm": rm_imp,
